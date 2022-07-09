@@ -1,0 +1,37 @@
+
+# - minecraft_manifest: "https://piston-meta.mojang.com/mc/game/version_manifest_v2.json"
+
+- name: download manifest
+  uri:
+    url: "{{ minecraft_manifest }}"
+    return_content: yes
+  register: manifest
+
+- name: debug
+  debug:
+    msg:  "{{ ((manifest.content | from_json).versions | selectattr('id', '==', minecraft_version))[0].url }}"
+
+
+# - name: debug
+#   debug:
+#     msg:  "{{ manifest.content | to_json | selectattr('id', 'match', minecraft_version) }}"
+
+- name: download single version manifest
+  uri:
+    url: "{{ ((manifest.content | from_json).versions | selectattr('id', '==', minecraft_version))[0].url }}"
+    return_content: yes
+  register: version_manifest
+
+
+- name: set download url
+  set_fact:
+    download_link: "{{ (version_manifest.content | from_json).downloads.server.url }}"
+    # download_link: "{{ version_manifest.content | json_query('downloads.server.url') }}"
+
+- name: download Minecraft server
+  get_url:
+    url: "{{ download_link }}"
+    dest: "{{ minecraft_home }}/minecraft_server.{{ minecraft_version }}.jar"
+    owner: "{{ minecraft_user }}"
+    group: "{{ minecraft_group }}"
+    mode: '0755'

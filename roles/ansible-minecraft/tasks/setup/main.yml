@@ -1,0 +1,46 @@
+
+
+
+
+- name: install Minecraft dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+    install_recommends: no
+    update_cache: yes
+  with_items: "{{ dependencies }}"
+
+- name: install Spigot dependencies
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - git
+    - tar
+  when: minecraft_server == 'spigot'
+
+
+- name: create Minecraft group
+  group:
+    state: present
+    name: "{{ minecraft_group }}"
+    system: yes
+
+- name: create Minecraft user
+  user:
+    state: present
+    name: "{{ minecraft_user }}"
+    group: "{{ minecraft_group }}"
+    home: "{{ minecraft_home }}"
+
+- name: set executable name (Minecraft)
+  set_fact:
+    minecraft_jar: minecraft_server.jar
+  when: minecraft_server == 'minecraft'
+
+- name: set executable name (Spigot)
+  set_fact:
+    minecraft_jar: spigot.jar
+  when: minecraft_server == 'spigot'
+
+- include_tasks: systemd.yml
+

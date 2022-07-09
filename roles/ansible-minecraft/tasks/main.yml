@@ -1,0 +1,6 @@
+- include_tasks: setup/main.yml
+- include_tasks: download/main.yml
+- include_tasks: install/main.yml
+- include_tasks: acl.yml
+- include_tasks: configure.yml
+- meta: flush_handlers

@@ -1,0 +1,18 @@
+---
+# Chain handlers to support multiple process supervisors. A task simply needs
+# to notify 'restart Minecraft', which will trigger the supervisor-specific
+# actions.
+
+- name: restart Minecraft
+  service:
+    name: "{{ minecraft_service_name }}"
+    state: restarted
+
+- name: enable service
+  service:
+    name: "{{ item }}"
+    state: started
+    enabled: true
+  with_items:
+    - "{{ minecraft_service_name }}.service"
+    - "{{ minecraft_service_name }}.socket"

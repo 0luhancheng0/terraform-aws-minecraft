@@ -1,0 +1,9 @@
+- include_tasks: minecraft.yml
+  when: minecraft_server == 'minecraft'
+
+- include_tasks: spigot.yml
+  when: minecraft_server == 'spigot'
+
+- name: get minecraft_server value
+  debug:
+    msg: "{{ minecraft_server }}"
