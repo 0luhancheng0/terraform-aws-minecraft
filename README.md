@@ -17,3 +17,6 @@ Server specific configuration is available at [master.yaml](./master.yaml), the 
 
 If you dont have an available domain name registered under aws route53 you can just comment out module route53 section in [main.tf](main.tf)
 
+## Credit
+
+Ansible role is developped base on [ansible minecraft](https://github.com/devops-coop/ansible-minecraft)
