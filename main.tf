@@ -14,6 +14,7 @@ module "ssh-key" {
 module "ec2" {
   source     = "./modules/ec2"
   namespace  = var.namespace
+  instance_type = var.instance_type
   vpc        = module.networking.vpc
   security_group_ids = module.networking.security_group_ids
   key_name   = module.ssh-key.key_name
